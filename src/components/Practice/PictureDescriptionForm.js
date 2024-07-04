@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../../pages/PracticePage.css'; // Đường dẫn tới CSS file
 
 const PictureDescriptionForm = () => {
   const [title, setTitle] = useState('');

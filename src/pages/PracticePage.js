@@ -4,38 +4,51 @@ import PictureDescriptionForm from '../components/Practice/PictureDescriptionFor
 import EmailResponseForm from '../components/Practice/EmailResponseForm';
 import EssayWritingForm from '../components/Practice/EssayWritingForm';
 import './PracticePage.css'; // Import file CSS
+import './Forms.css'; // Đường dẫn tới CSS file
 
 const PracticePage = () => {
   const [selectedTab, setSelectedTab] = useState('picture');
   const [showForm, setShowForm] = useState(false);
+
+  const toggleForm = () => {
+    setShowForm(!showForm);
+  };
 
   const renderTabContent = () => {
     switch (selectedTab) {
       case 'picture':
         return (
           <>
-            {showForm && <PictureDescriptionForm />}
+            <div className={`form-container ${showForm ? 'expanded' : ''}`}>
+              <PictureDescriptionForm />
+            </div>
             <PostList type="picture" />
           </>
         );
       case 'email':
         return (
           <>
-            {showForm && <EmailResponseForm />}
+            <div className={`form-container ${showForm ? 'expanded' : ''}`}>
+              <EmailResponseForm />
+            </div>
             <PostList type="email" />
           </>
         );
       case 'essay':
         return (
           <>
-            {showForm && <EssayWritingForm />}
+            <div className={`form-container ${showForm ? 'expanded' : ''}`}>
+              <EssayWritingForm />
+            </div>
             <PostList type="essay" />
           </>
         );
       default:
         return (
           <>
-            {showForm && <PictureDescriptionForm />}
+            <div className={`form-container ${showForm ? 'expanded' : ''}`}>
+              <PictureDescriptionForm />
+            </div>
             <PostList type="picture" />
           </>
         );
@@ -64,7 +77,7 @@ const PracticePage = () => {
           Essay Writing
         </button>
       </nav>
-      <button onClick={() => setShowForm(!showForm)}>
+      <button onClick={toggleForm}>
         {showForm ? 'Hide Form' : 'Add New Post'}
       </button>
       <div>{renderTabContent()}</div>
