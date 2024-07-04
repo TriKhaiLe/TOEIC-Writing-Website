@@ -108,3 +108,27 @@ button:hover {
 .login-button:hover {
   background-color: #0056b3;
 }
+
+.register-button {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: #31fec4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.register-button:hover {
+  background-color: #0a8a01;
+}
+
+.show-form-button {
+  color: rgb(0, 78, 146);
+  border: 1px solid #00c3ff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
