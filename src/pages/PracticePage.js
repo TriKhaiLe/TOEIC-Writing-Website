@@ -3,12 +3,14 @@ import PostList from '../components/Practice/PostList';
 import PictureDescriptionForm from '../components/Practice/PictureDescriptionForm';
 import EmailResponseForm from '../components/Practice/EmailResponseForm';
 import EssayWritingForm from '../components/Practice/EssayWritingForm';
+import LoginModal from '../components/Authen/LoginModal';
 import './PracticePage.css'; // Import file CSS
-import './Forms.css'; // Đường dẫn tới CSS file
+import './Forms.css'; // Import file CSS
 
 const PracticePage = () => {
   const [selectedTab, setSelectedTab] = useState('picture');
   const [showForm, setShowForm] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const toggleForm = () => {
     setShowForm(!showForm);
@@ -80,7 +82,11 @@ const PracticePage = () => {
       <button onClick={toggleForm}>
         {showForm ? 'Hide Form' : 'Add New Post'}
       </button>
+      <button className="login-button" onClick={() => setShowLoginModal(true)}>
+        Login
+      </button>
       <div>{renderTabContent()}</div>
+      <LoginModal show={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </div>
   );
 };
