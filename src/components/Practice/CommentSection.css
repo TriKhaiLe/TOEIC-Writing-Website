@@ -48,3 +48,16 @@
     background-color: #0056b3;
   }
   
+  .comment-section button[type="button"] {
+    background-color: #28a745;
+  }
+  
+  .comment-section button[type="button"]:hover {
+    background-color: #218838;
+  }
+  
+  .comment-section button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
