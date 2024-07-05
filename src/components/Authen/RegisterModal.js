@@ -17,7 +17,7 @@ const RegisterModal = ({ show, onClose }) => {
 
     try {
       // Gửi yêu cầu đăng ký đến API của bạn
-      const response = await axios.post('/api/register', { userName, password });
+      const response = await axios.post('https://localhost:7184/RegisterLearner', { userName, password });
 
       // Nếu đăng ký thành công, lưu tên người dùng vào localStorage
       if (response.data.success) {
@@ -26,7 +26,7 @@ const RegisterModal = ({ show, onClose }) => {
       }
     } catch (error) {
       console.error('Error registering:', error);
-      setError('Registration failed');
+      setError('Registration failed: ' + error.response.data);
     }
   };
 
