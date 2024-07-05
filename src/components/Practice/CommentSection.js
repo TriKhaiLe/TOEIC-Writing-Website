@@ -9,6 +9,7 @@ const CommentSection = ({ comments, postId }) => {
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [isTimerStarted, setIsTimerStarted] = useState(false);
+  const [isCommentsVisible, setIsCommentsVisible] = useState(false); // State for comment visibility
 
   useEffect(() => {
     // Giả định rằng thông tin người dùng đã được lưu trữ trong localStorage khi đăng nhập
@@ -65,24 +66,49 @@ const CommentSection = ({ comments, postId }) => {
     */
   };
 
+  const toggleCommentsVisibility = () => {
+    setIsCommentsVisible((prevState) => !prevState);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const start = e.target.selectionStart;
+      const end = e.target.selectionEnd;
+      setNewComment((prevComment) => prevComment.substring(0, start) + "\t" + prevComment.substring(end));
+      e.target.selectionStart = e.target.selectionEnd = start + 1;
+    }
+  };
+
   return (
     <div className="comment-section">
       <h4>Comments</h4>
-      <ul>
-        {commentList.map((comment) => (
-          <li key={comment.id}>
-            <strong>{comment.user}:</strong> {comment.content}
-          </li>
-        ))}
-      </ul>
+      <button onClick={toggleCommentsVisibility}>
+        {isCommentsVisible ? 'Hide Comments' : 'Show Comments'}
+      </button>
+      {isCommentsVisible && (
+        <ul>
+          {commentList.map((comment) => (
+            <li key={comment.id}>
+              <strong>{comment.user}:</strong>
+              <pre>{comment.content}</pre> {/* Use <pre> to preserve formatting */}
+
+            </li>
+          ))}
+        </ul>
+      )}
+
       <form onSubmit={handleAddComment}>
-        <input 
-          type="text" 
+        <textarea 
           value={newComment} 
           onChange={(e) => setNewComment(e.target.value)} 
-          placeholder="Add a comment" 
+          onKeyDown={handleKeyDown} 
+          placeholder="Start timer and add a comment" 
+          rows="5" // Adjust the number of rows as needed
           required 
-        />
+          disabled={!isTimerStarted}
+        ></textarea>
+
         <button type="submit" disabled={!isTimerStarted}>Add Comment (Time: {new Date(timer * 1000).toISOString().substr(11, 8)})</button>
         <button type="button" onClick={handleStartTimer} disabled={isTimerStarted}>
           Start Timer

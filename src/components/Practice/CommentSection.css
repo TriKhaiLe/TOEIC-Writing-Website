@@ -17,10 +17,17 @@
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 10px;
-  }
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
   
   .comment-section li strong {
     margin-right: 5px;
+  }
+  
+  .comment-section pre {
+    white-space: pre-wrap; /* Preserve newlines and wrap long lines */
   }
   
   .comment-section form {
@@ -28,17 +35,21 @@
     flex-direction: column;
   }
   
-  .comment-section input[type="text"] {
+  .comment-section textarea {
+    width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
+    margin: 5px 0 10px 0;
+    display: inline-block;
+    border: 1px solid #56a8ff;
+    box-sizing: border-box;
     border-radius: 5px;
+    resize: vertical; /* Allow vertical resizing */
   }
-  
+    
   .comment-section button {
     padding: 10px 20px;
     border: none;
-    background-color: #007bff;
+    background-color: #56a8ff;
     color: white;
     border-radius: 20px;
     cursor: pointer;
