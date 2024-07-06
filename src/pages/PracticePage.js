@@ -18,6 +18,11 @@ const PracticePage = ({ userName, onLoginSuccess }) => {
     setShowForm(!showForm);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('userName');
+    onLoginSuccess(''); // Reset the userName in App component
+  };
+
   const renderTabContent = () => {
     switch (selectedTab) {
       case 'picture':
@@ -85,10 +90,13 @@ const PracticePage = ({ userName, onLoginSuccess }) => {
         {showForm ? 'Hide Form' : 'Add New Post'}
       </button>
       {userName ? (
-        <div className="welcome-message">
-          Welcome, {userName}!
-        </div>
-      ) : (
+        <div className="auth-section">
+        <span className="welcome-message">Welcome, {userName}!</span>
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
+    ) : (
         <div className="auth-buttons">
           <button className="login-button" onClick={() => setShowLoginModal(true)}>
             Login
