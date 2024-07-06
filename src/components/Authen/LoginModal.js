@@ -1,24 +1,37 @@
 import React, { useState } from 'react';
-import './LoginModal.css';
 import axios from 'axios';
+import './LoginModal.css';
 
-const LoginModal = ({ show, onClose }) => {
+const LoginModal = ({ show, onClose, onLoginSuccess }) => { // Thêm onLoginSuccess prop
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Added loading state
+  const [success, setSuccess] = useState(false); // Added success state
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      // Gửi yêu cầu đăng nhập đến API của bạn
-      const response = await axios.post('/api/login', { userName, password });
 
-      // Nếu đăng nhập thành công, lưu tên người dùng vào localStorage
-      if (response.data.success) {
-        localStorage.setItem('userName', userName);
-        onClose(); // Đóng modal sau khi đăng nhập thành công
+    setLoading(true);
+    setError('');
+    setSuccess(false);
+
+    try {
+      const response = await axios.post('https://localhost:7184/LoginLearner', { userName, password });
+
+      if (response.status === 200) {
+        // localStorage.setItem('userName', userName);
+        setSuccess(true);
+        onLoginSuccess(userName); // Gọi hàm onLoginSuccess để cập nhật trạng thái đăng nhập
+        setTimeout(onClose, 1000); // Đóng modal sau 1 giây sau khi đăng nhập thành công
+      } else {
+        setError('Login failed: ' + response.data);
       }
     } catch (error) {
       console.error('Error logging in:', error);
+      setError('Login failed: ' + (error.response?.data || 'Unknown error'));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -30,6 +43,9 @@ const LoginModal = ({ show, onClose }) => {
     <div className="modal">
       <div className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
+        {success ? (
+          <p className="success">Login successful! Closing...</p>
+        ) : (
         <form onSubmit={handleLogin}>
           <input 
             type="text" 
@@ -37,6 +53,7 @@ const LoginModal = ({ show, onClose }) => {
             onChange={(e) => setUserName(e.target.value)} 
             placeholder="User Name" 
             required 
+            disabled={loading} // Disable input fields while loading
           />
           <input 
             type="password" 
@@ -44,13 +61,17 @@ const LoginModal = ({ show, onClose }) => {
             onChange={(e) => setPassword(e.target.value)} 
             placeholder="Password" 
             required 
+            disabled={loading} // Disable input fields while loading
           />
-          <button type="submit">Login</button>
+          {error && <p className="error">{error}</p>}
+          <button type="submit" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
         </form>
+        )}
       </div>
     </div>
   );
 };
 
 export default LoginModal;
-  

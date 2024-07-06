@@ -3,7 +3,7 @@ import axios from 'axios';
 import CommentSection from './CommentSection'; // Import component CommentSection
 import './PostList.css'; // Import CSS file
 
-const PostList = ({ type }) => {
+const PostList = ({ type, userName }) => { // Added userName prop
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -15,8 +15,8 @@ const PostList = ({ type }) => {
           title: 'Fake Post 1',
           content: 'This is a fake post for type ' + type,
           comments: [
-            { id: 1, content: 'This is a fake comment.' },
-            { id: 2, content: 'This is another fake comment.' }
+            { id: 1, content: 'This is a fake comment.', user: 'User1' },
+            { id: 2, content: 'This is another fake comment.', user: 'User2' }
           ]
         },
         {
@@ -24,7 +24,7 @@ const PostList = ({ type }) => {
           title: 'Fake Post 2',
           content: 'This is another fake post for type ' + type,
           comments: [
-            { id: 3, content: 'Yet another fake comment.' }
+            { id: 3, content: 'Yet another fake comment.', user: 'User3' }
           ]
         },
       ];
@@ -50,7 +50,7 @@ const PostList = ({ type }) => {
         <div key={post.id} className="post">
           <h3>{post.title}</h3>
           <p>{post.content}</p>
-          <CommentSection comments={post.comments} postId={post.id} />
+          <CommentSection comments={post.comments} postId={post.id} userName={userName} /> {/* Pass userName to CommentSection */}
         </div>
       ))}
     </div>

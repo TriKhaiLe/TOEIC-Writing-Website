@@ -65,3 +65,14 @@
     margin-top: 10px;
   }
   
+  .success {
+    color: green;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  

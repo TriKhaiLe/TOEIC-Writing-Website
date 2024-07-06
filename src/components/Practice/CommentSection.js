@@ -2,22 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './CommentSection.css'; // Import CSS file
 
-const CommentSection = ({ comments, postId }) => {
+const CommentSection = ({ comments, postId, userName }) => { // Add userName prop
   const [newComment, setNewComment] = useState('');
   const [commentList, setCommentList] = useState(comments);
-  const [userName, setUserName] = useState('');
   const [timer, setTimer] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [isTimerStarted, setIsTimerStarted] = useState(false);
   const [isCommentsVisible, setIsCommentsVisible] = useState(false); // State for comment visibility
-
-  useEffect(() => {
-    // Giả định rằng thông tin người dùng đã được lưu trữ trong localStorage khi đăng nhập
-    const storedUserName = localStorage.getItem('userName');
-    if (storedUserName) {
-      setUserName(storedUserName);
-    }
-  }, []);
 
   useEffect(() => {
     let interval;
@@ -92,7 +83,6 @@ const CommentSection = ({ comments, postId }) => {
             <li key={comment.id}>
               <strong>{comment.user}:</strong>
               <pre>{comment.content}</pre> {/* Use <pre> to preserve formatting */}
-
             </li>
           ))}
         </ul>
