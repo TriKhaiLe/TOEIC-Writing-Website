@@ -40,7 +40,7 @@ const PracticePage = ({ userName, onLoginSuccess }) => {
             <div className={`form-container ${showForm ? 'expanded' : ''}`}>
               <EmailResponseForm />
             </div>
-            <PostList type="email" userName={userName} />
+            <PostList type="Email" userName={userName} />
           </>
         );
       case 'essay':
@@ -49,7 +49,7 @@ const PracticePage = ({ userName, onLoginSuccess }) => {
             <div className={`form-container ${showForm ? 'expanded' : ''}`}>
               <EssayWritingForm />
             </div>
-            <PostList type="essay" userName={userName} />
+            <PostList type="Essay" userName={userName} />
           </>
         );
       default:
