@@ -81,7 +81,7 @@ const CommentSection = ({ comments, postId, userName }) => { // Add userName pro
         <ul>
           {commentList.map((comment) => (
             <li key={comment.id}>
-              <strong>{comment.user}:</strong>
+              <strong>{comment.userName}:</strong>
               <pre>{comment.content}</pre> {/* Use <pre> to preserve formatting */}
             </li>
           ))}

@@ -31,7 +31,7 @@ const PracticePage = ({ userName, onLoginSuccess }) => {
             <div className={`form-container ${showForm ? 'expanded' : ''}`}>
               <PictureDescriptionForm />
             </div>
-            <PostList type="picture" userName={userName} />
+            <PostList type="Picture" userName={userName} />
           </>
         );
       case 'email':

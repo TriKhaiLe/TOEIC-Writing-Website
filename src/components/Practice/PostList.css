@@ -17,3 +17,8 @@
     margin-bottom: 10px;
   }
   
+  .post-image {
+    max-width: 100%;
+    height: auto;
+  }
+  

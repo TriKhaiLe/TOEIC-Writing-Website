@@ -5,54 +5,36 @@ import './PostList.css'; // Import CSS file
 
 const PostList = ({ type, userName }) => { // Added userName prop
   const [posts, setPosts] = useState([]);
+  const page = 1;
+  const [pageSize, setPageSize] = useState(1);
 
   useEffect(() => {
     const fetchPosts = async () => {
-      // Sử dụng dữ liệu giả nếu không có API thực
-      const fakePosts = [
-        {
-          id: 1,
-          title: 'Fake Post 1',
-          content: 'This is a fake post for type ' + type,
-          comments: [
-            { id: 1, content: 'This is a fake comment.', user: 'User1' },
-            { id: 2, content: 'This is another fake comment.', user: 'User2' }
-          ]
-        },
-        {
-          id: 2,
-          title: 'Fake Post 2',
-          content: 'This is another fake post for type ' + type,
-          comments: [
-            { id: 3, content: 'Yet another fake comment.', user: 'User3' }
-          ]
-        },
-      ];
-      setPosts(fakePosts);
-
-      // Nếu có API thực, sử dụng API này
-      /*
       try {
-        const response = await axios.get(`/api/posts?type=${type}`);
+        const response = await axios.get(`https://localhost:7184/GetPosts?pageNumber=${page}&pageSize=${pageSize}&type=${type}`);
         setPosts(response.data);
       } catch (error) {
         console.error('Error fetching posts:', error);
       }
-      */
     };
 
     fetchPosts();
-  }, [type]);
+  }, [pageSize, type]);
 
   return (
     <div>
       {posts.map((post) => (
         <div key={post.id} className="post">
           <h3>{post.title}</h3>
-          <p>{post.content}</p>
+          {type === 'Picture' ? (
+            <img src={post.content} alt={post.title} className="post-image" />
+          ) : (
+            <p>{post.content}</p>
+          )}
           <CommentSection comments={post.comments} postId={post.id} userName={userName} /> {/* Pass userName to CommentSection */}
         </div>
       ))}
+      <button onClick={() => setPageSize((prev) => prev + 1)}>Load More</button>
     </div>
   );
 };
