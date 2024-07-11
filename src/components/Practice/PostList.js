@@ -7,6 +7,7 @@ const PostList = ({ type, userName }) => { // Added userName prop
   const [posts, setPosts] = useState([]);
   const page = 1;
   const [pageSize, setPageSize] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -20,6 +21,12 @@ const PostList = ({ type, userName }) => { // Added userName prop
 
     fetchPosts();
   }, [pageSize, type]);
+
+  const handleLoadMore = async () => {
+    setIsSubmitting(true);
+    setPageSize((prevPageSize) => prevPageSize + 1);
+    setIsSubmitting(false);
+  };
 
   return (
     <div>
@@ -42,7 +49,9 @@ const PostList = ({ type, userName }) => { // Added userName prop
           <CommentSection comments={post.comments} postId={post.id} userName={userName} /> {/* Pass userName to CommentSection */}
         </div>
       ))}
-      <button onClick={() => setPageSize((prev) => prev + 1)}>Load More</button>
+      <button onClick={handleLoadMore} disabled={isSubmitting}>
+        {isSubmitting ? 'Loading...' : 'Load More'}
+      </button>
     </div>
   );
 };

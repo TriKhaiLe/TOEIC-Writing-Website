@@ -71,7 +71,7 @@ const PracticePage = ({ userName, onLoginSuccess }) => {
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: '#f0f8ff', minHeight: '100vh' }}>
       <nav>
         <button 
           className={selectedTab === 'Picture' ? 'selected' : ''} 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import config from '../../config'; // Import config file
 
@@ -6,10 +6,22 @@ const EssayWritingForm = ({onPostCreated }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage('');
+      }, 3000); // Reset message after 3 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-try {
+    setIsSubmitting(true); // Set isSubmitting to true when form is submitted
+    try {
       // Prepare post data
       const postData = {
         title,
@@ -19,7 +31,7 @@ try {
       };
 
       // Send post data to backend
-      const response = await axios.post(`${config.apiUrl}/CreatePost`, postData);
+      await axios.post(`${config.apiUrl}/CreatePost`, postData);
       
       // Thông báo thành công
       setMessage('Post created successfully!');
@@ -33,6 +45,8 @@ try {
 
     } catch (error) {
       console.error('Error creating post:', error);
+    } finally {
+      setIsSubmitting(false); // Set isSubmitting to false after post creation
     }
   };
 
@@ -51,7 +65,9 @@ try {
         placeholder="Description" 
         required 
       ></textarea>
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Submitting...' : 'Submit'}
+      </button>
       {message && <p>{message}</p>}
     </form>
   );
