@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './RegisterModal.css';
 import axios from 'axios';
+import config from '../../config'; // Import config file
 
 const RegisterModal = ({ show, onClose, onLoginSuccess }) => {
   const [userName, setUserName] = useState('');
@@ -23,7 +24,7 @@ const RegisterModal = ({ show, onClose, onLoginSuccess }) => {
 
     try {
       // Gửi yêu cầu đăng ký đến API của bạn
-      const response = await axios.post('https://localhost:7184/RegisterLearner', { userName, password });
+      const response = await axios.post(`${config.apiUrl}/RegisterLearner`, { userName, password });
 
       // Nếu đăng ký thành công, lưu tên người dùng vào localStorage
       if (response.status === 200) {

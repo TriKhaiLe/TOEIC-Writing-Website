@@ -1,28 +1,45 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import config from '../../config'; // Import config file
 
-const EmailResponseForm = () => {
+const EmailResponseForm = ({ onPostCreated }) => {
   const [title, setTitle] = useState('');
-  const [email, setEmail] = useState('');
+  const [content, setContent] = useState('');
   const [description, setDescription] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/posts', {
+      // Prepare post data
+      const postData = {
         title,
-        email,
+        content,
         description,
-        type: 'email'
-      });
-      // Sau khi tạo thành công, làm mới danh sách bài post hoặc thông báo cho người dùng
+        type: 'Email',
+        userName: localStorage.getItem('userName')
+      };
+
+      // Send post data to backend
+      await axios.post(`${config.apiUrl}/CreatePost`, postData);
+      
+      // Thông báo thành công
+      setMessage('Post created successfully!');
+
+      // Gọi callback để thêm post mới vào danh sách
+      onPostCreated();
+
+      // Clear form
+      setTitle('');
+      setContent('');
+      setDescription('');
+
     } catch (error) {
       console.error('Error creating post:', error);
     }
   };
 
   return (
-
     <form onSubmit={handleSubmit}>
       <input 
         type="text" 
@@ -32,9 +49,9 @@ const EmailResponseForm = () => {
         required 
       />
       <textarea 
-        value={email} 
-        onChange={(e) => setEmail(e.target.value)} 
-        placeholder="Email" 
+        value={content} 
+        onChange={(e) => setContent(e.target.value)} 
+        placeholder="Email Content" 
         required 
       ></textarea>
       <textarea 
@@ -44,6 +61,7 @@ const EmailResponseForm = () => {
         required 
       ></textarea>
       <button type="submit">Submit</button>
+      {message && <p>{message}</p>}
     </form>
   );
 };

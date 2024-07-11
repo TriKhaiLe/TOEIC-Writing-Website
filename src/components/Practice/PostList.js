@@ -25,7 +25,7 @@ const PostList = ({ type, userName }) => { // Added userName prop
     <div>
       {posts.map((post) => (
         <div key={post.id} className="post">
-          <h3>{post.title}</h3>
+          <h3>{post.userName}: {post.title}</h3>
           {type === 'Picture' ? (
             <>
               <img src={post.content} alt={post.title} className="post-image" />
@@ -37,7 +37,7 @@ const PostList = ({ type, userName }) => { // Added userName prop
               <p>{post.requestDescription}</p>
             </>
           ) : type === 'Essay' ? (
-            <p>{post.content}</p>
+            <p>{post.requestDescription}</p>
           ) : null}
           <CommentSection comments={post.comments} postId={post.id} userName={userName} /> {/* Pass userName to CommentSection */}
         </div>

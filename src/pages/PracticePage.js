@@ -9,10 +9,11 @@ import './PracticePage.css'; // Import file CSS
 import './Forms.css'; // Import file CSS
 
 const PracticePage = ({ userName, onLoginSuccess }) => {
-  const [selectedTab, setSelectedTab] = useState('picture');
+  const [selectedTab, setSelectedTab] = useState('Picture');
   const [showForm, setShowForm] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const toggleForm = () => {
     setShowForm(!showForm);
@@ -23,42 +24,47 @@ const PracticePage = ({ userName, onLoginSuccess }) => {
     onLoginSuccess(''); // Reset the userName in App component
   };
 
+  const handlePostCreated = () => {
+    // Increment the refreshKey to trigger a re-render
+    setRefreshKey(prevKey => prevKey + 1);
+  };
+
   const renderTabContent = () => {
     switch (selectedTab) {
-      case 'picture':
+      case 'Picture':
         return (
           <>
             <div className={`form-container ${showForm ? 'expanded' : ''}`}>
-              <PictureDescriptionForm />
+              <PictureDescriptionForm onPostCreated={handlePostCreated} />
             </div>
-            <PostList type="Picture" userName={userName} />
+            <PostList key={refreshKey} type="Picture" userName={userName} />
           </>
         );
-      case 'email':
+      case 'Email':
         return (
           <>
             <div className={`form-container ${showForm ? 'expanded' : ''}`}>
-              <EmailResponseForm />
+              <EmailResponseForm onPostCreated={handlePostCreated} />
             </div>
-            <PostList type="Email" userName={userName} />
+            <PostList key={refreshKey} type="Email" userName={userName} />
           </>
         );
-      case 'essay':
+      case 'Essay':
         return (
           <>
             <div className={`form-container ${showForm ? 'expanded' : ''}`}>
-              <EssayWritingForm />
+              <EssayWritingForm onPostCreated={handlePostCreated} />
             </div>
-            <PostList type="Essay" userName={userName} />
+            <PostList key={refreshKey} type="Essay" userName={userName} />
           </>
         );
       default:
         return (
           <>
             <div className={`form-container ${showForm ? 'expanded' : ''}`}>
-              <PictureDescriptionForm />
+              <PictureDescriptionForm onPostCreated={handlePostCreated} />
             </div>
-            <PostList type="picture" userName={userName} />
+            <PostList key={refreshKey} type="Picture" userName={userName} />
           </>
         );
     }
@@ -68,20 +74,20 @@ const PracticePage = ({ userName, onLoginSuccess }) => {
     <div>
       <nav>
         <button 
-          className={selectedTab === 'picture' ? 'selected' : ''} 
-          onClick={() => setSelectedTab('picture')}
+          className={selectedTab === 'Picture' ? 'selected' : ''} 
+          onClick={() => setSelectedTab('Picture')}
         >
           Picture Description
         </button>
         <button 
-          className={selectedTab === 'email' ? 'selected' : ''} 
-          onClick={() => setSelectedTab('email')}
+          className={selectedTab === 'Email' ? 'selected' : ''} 
+          onClick={() => setSelectedTab('Email')}
         >
           Email Response
         </button>
         <button 
-          className={selectedTab === 'essay' ? 'selected' : ''} 
-          onClick={() => setSelectedTab('essay')}
+          className={selectedTab === 'Essay' ? 'selected' : ''} 
+          onClick={() => setSelectedTab('Essay')}
         >
           Essay Writing
         </button>

@@ -1,20 +1,36 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import './Forms.css'; // Đường dẫn tới CSS file
+import config from '../../config'; // Import config file
 
-const EssayWritingForm = () => {
+const EssayWritingForm = ({onPostCreated }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await axios.post('/api/posts', {
+try {
+      // Prepare post data
+      const postData = {
         title,
         description,
-        type: 'essay'
-      });
-      // Sau khi tạo thành công, làm mới danh sách bài post hoặc thông báo cho người dùng
+        type: 'Essay',
+        userName: localStorage.getItem('userName')
+      };
+
+      // Send post data to backend
+      const response = await axios.post(`${config.apiUrl}/CreatePost`, postData);
+      
+      // Thông báo thành công
+      setMessage('Post created successfully!');
+
+      // Gọi callback để thêm post mới vào danh sách
+      onPostCreated();
+
+      // Clear form
+      setTitle('');
+      setDescription('');
+
     } catch (error) {
       console.error('Error creating post:', error);
     }
@@ -36,6 +52,7 @@ const EssayWritingForm = () => {
         required 
       ></textarea>
       <button type="submit">Submit</button>
+      {message && <p>{message}</p>}
     </form>
   );
 };
