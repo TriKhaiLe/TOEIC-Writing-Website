@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './CommentSection.css'; // Import CSS file
+import config from '../../config'; // Import config file
 
 const CommentSection = ({ comments, postId, userName }) => { // Add userName prop
   const [newComment, setNewComment] = useState('');
@@ -9,6 +10,7 @@ const CommentSection = ({ comments, postId, userName }) => { // Add userName pro
   const [isRunning, setIsRunning] = useState(false);
   const [isTimerStarted, setIsTimerStarted] = useState(false);
   const [isCommentsVisible, setIsCommentsVisible] = useState(false); // State for comment visibility
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     let interval;
@@ -30,31 +32,25 @@ const CommentSection = ({ comments, postId, userName }) => { // Add userName pro
     e.preventDefault();
     if (newComment.trim() === '') return;
 
-    // Stop the timer
     setIsRunning(false);
-
-    // Format the timer into HH:MM:SS
+    setIsSubmitting(true); // Set isSubmitting to true when form is submitted
     const formattedTime = new Date(timer * 1000).toISOString().substr(11, 8);
-
     const newCommentObj = {
-      id: Date.now(),
+      postId: postId,
       content: `${newComment} (Time: ${formattedTime})`,
-      user: userName,
+      userName: userName,
     };
-    setCommentList([...commentList, newCommentObj]);
-    setNewComment('');
-    setIsTimerStarted(false); // Enable the start button again
 
-    // Nếu có API thực, sử dụng API này
-    /*
     try {
-      const response = await axios.post(`/api/posts/${postId}/comments`, { content: `${newComment} (Time: ${formattedTime})`, user: userName });
-      setCommentList([...commentList, response.data]);
+      await axios.post(`${config.apiUrl}/CreateComment`, newCommentObj);
+      setCommentList([...commentList, newCommentObj]);
       setNewComment('');
+      setIsTimerStarted(false); // Enable the start button again
     } catch (error) {
       console.error('Error adding comment:', error);
+    } finally {
+      setIsSubmitting(false); // Set isSubmitting to false after post creation
     }
-    */
   };
 
   const toggleCommentsVisibility = () => {
@@ -73,9 +69,9 @@ const CommentSection = ({ comments, postId, userName }) => { // Add userName pro
 
   return (
     <div className="comment-section">
-      <h4>Comments</h4>
+      <h4>Submissions</h4>
       <button onClick={toggleCommentsVisibility}>
-        {isCommentsVisible ? 'Hide Comments' : 'Show Comments'}
+        {isCommentsVisible ? 'Hide' : 'Show'}
       </button>
       {isCommentsVisible && (
         <ul>
@@ -93,14 +89,16 @@ const CommentSection = ({ comments, postId, userName }) => { // Add userName pro
           value={newComment} 
           onChange={(e) => setNewComment(e.target.value)} 
           onKeyDown={handleKeyDown} 
-          placeholder="Start timer and add a comment" 
+          placeholder="Start timer and add a Submission here..." 
           rows="5" // Adjust the number of rows as needed
           required 
-          disabled={!isTimerStarted}
+          disabled={!isTimerStarted || isSubmitting}
         ></textarea>
 
-        <button type="submit" disabled={!isTimerStarted}>Add Comment (Time: {new Date(timer * 1000).toISOString().substr(11, 8)})</button>
-        <button type="button" onClick={handleStartTimer} disabled={isTimerStarted}>
+        <button type="submit" disabled={!isTimerStarted || isSubmitting}>
+          {isSubmitting ? 'Submitting...' : `Submit (Time: ${new Date(timer * 1000).toISOString().substr(11, 8)})`}
+        </button>
+        <button type="button" onClick={handleStartTimer} disabled={isTimerStarted || isSubmitting}>
           Start Timer
         </button>
       </form>
