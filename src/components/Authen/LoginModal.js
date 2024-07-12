@@ -17,7 +17,7 @@ const LoginModal = ({ show, onClose, onLoginSuccess }) => { // Thêm onLoginSucc
     setSuccess(false);
 
     try {
-      const response = await axios.post('https://localhost:7184/LoginLearner', { userName, password });
+      const response = await axios.post(`${config.apiUrl}/LoginLearner`, { userName, password });
 
       if (response.status === 200) {
         // localStorage.setItem('userName', userName);

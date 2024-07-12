@@ -12,7 +12,7 @@ const PostList = ({ type, userName }) => { // Added userName prop
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`https://localhost:7184/GetPosts?pageNumber=${page}&pageSize=${pageSize}&type=${type}`);
+        const response = await axios.get(`${config.apiUrl}/GetPosts?pageNumber=${page}&pageSize=${pageSize}&type=${type}`);
         setPosts(response.data);
       } catch (error) {
         console.error('Error fetching posts:', error);
