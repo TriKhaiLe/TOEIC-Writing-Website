@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PracticePage from './pages/PracticePage';
 
 function App() {
@@ -13,8 +13,15 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/practice" element={<PracticePage userName={userName} onLoginSuccess={handleLoginSuccess} />} />
+        <Route 
+          path="/practice" 
+          element={<PracticePage userName={userName} onLoginSuccess={handleLoginSuccess} />} 
+        />
         {/* Thêm các route khác nếu cần */}
+        <Route 
+          path="*" 
+          element={<Navigate to="/practice" replace />} 
+        />
       </Routes>
     </Router>
   );
