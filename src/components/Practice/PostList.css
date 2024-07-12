@@ -28,3 +28,7 @@
   .requirement-description {
     text-align: center;
   }
+
+  .content-hidden {
+    font-style: italic;
+  }

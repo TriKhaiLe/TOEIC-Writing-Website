@@ -9,6 +9,7 @@ const PostList = ({ type, userName }) => { // Added userName prop
   const page = 1;
   const [pageSize, setPageSize] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [visiblePostId, setVisiblePostId] = useState(null); 
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -23,6 +24,10 @@ const PostList = ({ type, userName }) => { // Added userName prop
     fetchPosts();
   }, [pageSize, type]);
 
+  const handleUnhideContent = (postId) => {
+    setVisiblePostId(postId); // Set the visible post ID
+  };
+
   const handleLoadMore = async () => {
     setIsSubmitting(true);
     setPageSize((prevPageSize) => prevPageSize + 1);
@@ -34,7 +39,9 @@ const PostList = ({ type, userName }) => { // Added userName prop
       {posts.map((post) => (
         <div key={post.id} className="post">
           <h3>{post.userName}: {post.title}</h3>
-          {type === 'Picture' ? (
+          {visiblePostId !== post.id ? (
+            <p className='content-hidden'> Start Timer to display the content </p>
+          ) : type === 'Picture' ? (
             <>
               <img src={post.content} alt={post.title} className="post-image" />
               <p className='requirement-description'>{post.requestDescription}</p>
@@ -47,7 +54,7 @@ const PostList = ({ type, userName }) => { // Added userName prop
           ) : type === 'Essay' ? (
             <p>{post.requestDescription}</p>
           ) : null}
-          <CommentSection comments={post.comments} postId={post.id} userName={userName} /> {/* Pass userName to CommentSection */}
+          <CommentSection comments={post.comments} postId={post.id} userName={userName} onUnhideContent={handleUnhideContent}/> {/* Pass userName to CommentSection */}
         </div>
       ))}
       <button onClick={handleLoadMore} disabled={isSubmitting}>

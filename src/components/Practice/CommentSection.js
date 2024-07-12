@@ -3,7 +3,7 @@ import axios from 'axios';
 import './CommentSection.css'; // Import CSS file
 import config from '../../config'; // Import config file
 
-const CommentSection = ({ comments, postId, userName }) => { // Add userName prop
+const CommentSection = ({ comments, postId, userName, onUnhideContent }) => { // Add userName prop
   const [newComment, setNewComment] = useState('');
   const [commentList, setCommentList] = useState(comments);
   const [timer, setTimer] = useState(0);
@@ -26,6 +26,7 @@ const CommentSection = ({ comments, postId, userName }) => { // Add userName pro
     setTimer(0);
     setIsRunning(true);
     setIsTimerStarted(true);
+    onUnhideContent(postId);
   };
 
   const handleAddComment = async (e) => {
