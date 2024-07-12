@@ -72,3 +72,12 @@
     cursor: not-allowed;
   }
   
+  .icon-timer {
+    margin-right: 5px;
+    color: aqua;
+  }
+
+  .icon-paper-plane {
+    margin-right: 5px;
+    color:#28a745;
+  }

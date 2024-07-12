@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './CommentSection.css'; // Import CSS file
 import config from '../../config'; // Import config file
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStopwatch, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+ 
 
 const CommentSection = ({ comments, postId, userName, onUnhideContent }) => { // Add userName prop
   const [newComment, setNewComment] = useState('');
@@ -97,9 +100,11 @@ const CommentSection = ({ comments, postId, userName, onUnhideContent }) => { //
         ></textarea>
 
         <button type="submit" disabled={!isTimerStarted || isSubmitting}>
+        <FontAwesomeIcon className="icon-paper-plane" icon={faPaperPlane} />
           {isSubmitting ? 'Submitting...' : `Submit (Time: ${new Date(timer * 1000).toISOString().substr(11, 8)})`}
         </button>
         <button type="button" onClick={handleStartTimer} disabled={isTimerStarted || isSubmitting}>
+          <FontAwesomeIcon className='icon-timer' icon={faStopwatch} />
           Start Timer
         </button>
       </form>
