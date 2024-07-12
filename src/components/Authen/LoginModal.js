@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './LoginModal.css';
+import config from '../../config'; // Import config file
 
 const LoginModal = ({ show, onClose, onLoginSuccess }) => { // Thêm onLoginSuccess prop
   const [userName, setUserName] = useState('');

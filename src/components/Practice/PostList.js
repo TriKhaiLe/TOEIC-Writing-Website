@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import CommentSection from './CommentSection'; // Import component CommentSection
 import './PostList.css'; // Import CSS file
+import config from '../../config'; // Import config file
 
 const PostList = ({ type, userName }) => { // Added userName prop
   const [posts, setPosts] = useState([]);
