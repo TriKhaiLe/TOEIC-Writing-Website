@@ -1,10 +1,12 @@
+// CommentSection.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './CommentSection.css'; // Import CSS file
 import config from '../../config'; // Import config file
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStopwatch, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
- 
+import { sampleSentences } from '../PersonalInfo/SampleSentence'; // Import sampleSentences
+
 
 const CommentSection = ({ comments, postId, userName, onUnhideContent }) => { // Add userName prop
   const [newComment, setNewComment] = useState('');
@@ -50,6 +52,14 @@ const CommentSection = ({ comments, postId, userName, onUnhideContent }) => { //
       setCommentList([...commentList, newCommentObj]);
       setNewComment('');
       setIsTimerStarted(false); // Enable the start button again
+
+      // Check for sample sentences and update proficiency
+      sampleSentences.forEach(sentence => {
+        if (newComment.includes(sentence.sentence)) {
+          sentence.proficiency += 1;
+        }
+      });
+
     } catch (error) {
       console.error('Error adding comment:', error);
     } finally {
