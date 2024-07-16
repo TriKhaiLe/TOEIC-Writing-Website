@@ -19,7 +19,7 @@ function App() {
         <Navigation /> {/* Include the Navigation component */}
         <Routes>
           <Route path="/practice" element={<PracticePage userName={userName} onLoginSuccess={handleLoginSuccess} />} />
-          <Route path="/personal-info" element={<PersonalInfo />} />
+          <Route path="/personal-info" element={<PersonalInfo userName={userName}/>} />
           <Route path="/" element={<Navigate to="/practice" />} />
         </Routes>
       </div>

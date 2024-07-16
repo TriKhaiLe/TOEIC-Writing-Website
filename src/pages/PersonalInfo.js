@@ -1,21 +1,61 @@
-// PersonalInfo.js
-import React, { useState } from 'react';
-import { sampleSentences } from '../components/PersonalInfo/SampleSentence';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import config from '../config';
 
-const PersonalInfo = () => {
-  const [sentences, setSentences] = useState(sampleSentences);
+const PersonalInfo = ({userName}) => {
+  const [sentences, setSentences] = useState([]);
   const [newSentence, setNewSentence] = useState('');
   const [newMeaning, setNewMeaning] = useState('');
 
-  const addSentence = () => {
-    const newId = sentences.length ? sentences[sentences.length - 1].id + 1 : 1;
-    setSentences([...sentences, { id: newId, sentence: newSentence, meaning: newMeaning, proficiency: 0 }]);
-    setNewSentence('');
-    setNewMeaning('');
+  useEffect(() => {
+    const fetchSentences = async () => {
+      try {
+        const response = await axios.get(`${config.apiUrl}/GetLearnerSampleSentences/${userName}`);
+        const fetchedSentences = response.data.map(item => ({
+          id: item.sampleSentenceId,
+          sentence: item.sampleSentence,
+          meaning: item.meaning || 'N/A', // Assuming 'meaning' is part of the API response
+          proficiency: item.proficiencyLevel,
+        }));
+        setSentences(fetchedSentences);
+      } catch (error) {
+        console.error('Error fetching sample sentences:', error);
+      }
+    };
+
+    fetchSentences();
+  }, []);
+
+  const addSentence = async () => {
+    const newSentenceData = {
+      userName: userName,
+      sentence: newSentence,
+      meaning: newMeaning
+    };
+
+    try {
+      const response = await axios.post(`${config.apiUrl}/AddOrReferenceSampleSentence`, newSentenceData); 
+      const addedSentence = {
+        id: newSentenceData.id,
+        sentence: newSentenceData.sentence,
+        meaning: newSentenceData.meaning,
+        proficiency: 0,
+      };
+      setSentences([...sentences, addedSentence]);
+      setNewSentence('');
+      setNewMeaning('');
+    } catch (error) {
+      console.error('Error adding sample sentence:', error);
+    }
   };
 
-  const deleteSentence = (id) => {
-    setSentences(sentences.filter(sentence => sentence.id !== id));
+  const deleteSentence = async (id) => {
+    try {
+      await axios.delete(`${config.apiUrl}/DeleteLearnerSampleSentence/${userName}/${id}`);
+      setSentences(sentences.filter(sentence => sentence.id !== id));
+    } catch (error) {
+      console.error('Error deleting sample sentence:', error);
+    }
   };
 
   const totalProficiency = sentences.reduce((total, sentence) => total + sentence.proficiency, 0);
