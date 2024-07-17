@@ -1,30 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import config from '../config';
+import useSampleSentences from '../hooks/useSampleSentences';
 
 const PersonalInfo = ({userName}) => {
-  const [sentences, setSentences] = useState([]);
+  const [sentences, setSentences] = useSampleSentences();
   const [newSentence, setNewSentence] = useState('');
   const [newMeaning, setNewMeaning] = useState('');
-
-  useEffect(() => {
-    const fetchSentences = async () => {
-      try {
-        const response = await axios.get(`${config.apiUrl}/GetLearnerSampleSentences/${userName}`);
-        const fetchedSentences = response.data.map(item => ({
-          id: item.sampleSentenceId,
-          sentence: item.sampleSentence,
-          meaning: item.meaning || 'N/A', // Assuming 'meaning' is part of the API response
-          proficiency: item.proficiencyLevel,
-        }));
-        setSentences(fetchedSentences);
-      } catch (error) {
-        console.error('Error fetching sample sentences:', error);
-      }
-    };
-
-    fetchSentences();
-  }, []);
 
   const addSentence = async () => {
     const newSentenceData = {
@@ -34,7 +16,7 @@ const PersonalInfo = ({userName}) => {
     };
 
     try {
-      const response = await axios.post(`${config.apiUrl}/AddOrReferenceSampleSentence`, newSentenceData); 
+      await axios.post(`${config.apiUrl}/AddOrReferenceSampleSentence`, newSentenceData); 
       const addedSentence = {
         id: newSentenceData.id,
         sentence: newSentenceData.sentence,
