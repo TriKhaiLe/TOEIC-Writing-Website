@@ -12,7 +12,7 @@
   }
   
   .comment-section li {
-    background-color: #f9f9f9;
+    background-color: #cc7878;
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 10px;
@@ -74,10 +74,35 @@
   
   .icon-timer {
     margin-right: 5px;
-    color: aqua;
+    color: rgb(255, 102, 0);
   }
 
   .icon-paper-plane {
     margin-right: 5px;
     color:#28a745;
   }
+
+  .comment-section li.comment-inox {
+    border: 1px solid #606060;
+  }
+  
+  .comment-section li.comment-bronze {
+    border: 2px solid #cd7f32;
+  }
+  
+  .comment-section li.comment-gold {
+    border: 2px solid #ffd700;
+  }
+  
+  .comment-section li.comment-emerald {
+    border: 3px solid #50c878;
+  }
+  
+  .comment-section li.comment-ruby {
+    border: 3px solid #e0115f;
+  }
+  
+  .comment-section li.comment-diamond {
+    border: 4px solid #18b4d7;
+  }
+  
