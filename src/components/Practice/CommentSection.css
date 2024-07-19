@@ -11,9 +11,8 @@
     padding: 0;
   }
   
-  .comment-section li {
-    background-color: #cc7878;
-    border: 1px solid #ddd;
+  .comment-section ul li {
+    background-color: #f9f2ee;
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 10px;
@@ -22,12 +21,13 @@
     word-break: break-word;
 }
   
-  .comment-section li strong {
+  .comment-section strong {
     margin-right: 5px;
+    color: #3535dc;
   }
   
   .comment-section pre {
-    white-space: pre-wrap; /* Preserve newlines and wrap long lines */
+    white-space: pre-wrap; 
   }
   
   .comment-section form {
@@ -91,7 +91,7 @@
   }
   
   .comment-section li.comment-gold {
-    border: 2px solid #ffd700;
+    border: 3px solid #ffd700;
   }
   
   .comment-section li.comment-emerald {

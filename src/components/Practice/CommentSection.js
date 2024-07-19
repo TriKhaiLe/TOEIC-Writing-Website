@@ -17,10 +17,6 @@ const CommentSection = ({ comments, postId, userName, onUnhideContent }) => {
   const [sentences, setSentences, classification, setProficiencySum] = useSampleSentences();
 
   useEffect(() => {
-    console.log('Initial comments:', comments);
-  }, [comments]);
-
-  useEffect(() => {
     let interval;
     if (isRunning) {
       interval = setInterval(() => {
@@ -118,9 +114,7 @@ const CommentSection = ({ comments, postId, userName, onUnhideContent }) => {
       </button>
       {isCommentsVisible && (
         <ul>
-          {console.log('Comment list:', commentList)}
           {commentList.map((comment) => {
-            console.log('Comment Classification:', comment.Classification);
             return (
               <li key={comment.id} className={getBorderClass(comment.classification)}>
                 <strong>{comment.userName}:</strong>
