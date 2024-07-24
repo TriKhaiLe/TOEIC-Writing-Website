@@ -14,8 +14,9 @@ const useSampleSentences = () => {
         const fetchedSentences = response.data.map(item => ({
           id: item.sampleSentenceId,
           sentence: item.sampleSentence,
-          meaning: item.meaning || 'N/A', // Assuming 'meaning' is part of the API response
+          meaning: item.meaning || 'N/A',
           proficiency: item.proficiencyLevel,
+          type: item.type
         }));
         setSentences(fetchedSentences);
 
