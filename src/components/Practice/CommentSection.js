@@ -36,7 +36,7 @@ const CommentSection = ({ comments, postId, userName, onUnhideContent }) => {
   const handleAddComment = async (e) => {
     e.preventDefault();
     if (newComment.trim() === '') return;
-
+  
     setIsRunning(false);
     setIsSubmitting(true);
     const formattedTime = new Date(timer * 1000).toISOString().substr(11, 8);
@@ -46,25 +46,44 @@ const CommentSection = ({ comments, postId, userName, onUnhideContent }) => {
       userName: userName,
       classification: classification
     };
-
+  
     try {
       await axios.post(`${config.apiUrl}/CreateComment`, newCommentObj);
       setCommentList([...commentList, newCommentObj]);
       setNewComment('');
       setIsTimerStarted(false);
-
-      const sentencesToUpdate = sentences.filter(sentence => newComment.includes(sentence.sentence));
-      for (const sentence of sentencesToUpdate) {
-        await axios.put(`${config.apiUrl}/UpdateProficiency`, {
-          userName: userName,
-          sampleSentenceId: sentence.id,
-          proficiencyIncrement: 1
-        });
-        const updatedSentence = { ...sentence, proficiency: sentence.proficiency + 1 };
-        setSentences(prev => prev.map(s => (s.id === sentence.id ? updatedSentence : s)));
-        
+  
+      const sentencesToUpdate = [];
+      const lowerCaseComment = newComment.toLowerCase();
+  
+      sentences.forEach(sentence => {
+        const lowerCaseSentence = sentence.sentence.toLowerCase();
+        const occurrences = lowerCaseComment.split(lowerCaseSentence).length - 1;
+        if (occurrences > 0) {
+          sentencesToUpdate.push({
+            sampleSentenceId: sentence.id,
+            proficiencyIncrement: occurrences
+          });
+        }
+      });
+  
+      const updateData = {
+        userName: userName,
+        Updates: sentencesToUpdate
+      };
+  
+      if (updateData.Updates.length > 0) {
+        await axios.put(`${config.apiUrl}/UpdateProficiencyBatch`, updateData);
+        setSentences(prev =>
+          prev.map(s => {
+            const updatedSentence = updateData.Updates.find(u => u.sampleSentenceId === s.id);
+            return updatedSentence ? { ...s, proficiency: s.proficiency + updatedSentence.proficiencyIncrement } : s;
+          })
+        );
+  
         // Update the proficiency sum
-        setProficiencySum(prevSum => prevSum + 1);
+        const totalIncrement = updateData.Updates.reduce((sum, update) => sum + update.proficiencyIncrement, 0);
+        setProficiencySum(prevSum => prevSum + totalIncrement);
       }
     } catch (error) {
       console.error('Error adding comment:', error);
@@ -72,7 +91,7 @@ const CommentSection = ({ comments, postId, userName, onUnhideContent }) => {
       setIsSubmitting(false);
     }
   };
-
+  
   const toggleCommentsVisibility = () => {
     setIsCommentsVisible((prevState) => !prevState);
   };
@@ -114,14 +133,12 @@ const CommentSection = ({ comments, postId, userName, onUnhideContent }) => {
       </button>
       {isCommentsVisible && (
         <ul>
-          {commentList.map((comment) => {
-            return (
-              <li key={comment.id} className={getBorderClass(comment.classification)}>
-                <strong>{comment.userName}:</strong>
-                <pre>{comment.content}</pre>
-              </li>
-            );
-          })}
+          {commentList.map((comment) => (
+            <li key={comment.id} className={getBorderClass(comment.classification)}>
+              <strong>{comment.userName}:</strong>
+              <pre>{comment.content}</pre>
+            </li>
+          ))}
         </ul>
       )}
 
